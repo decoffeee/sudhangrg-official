@@ -21,7 +21,7 @@ const jsonLd = {
       jobTitle: "Home Minister of Nepal",
       description: site.description,
       url: site.url,
-      image: `${site.url}/images/person-front.png`,
+      image: `${site.url}/images/person-front.webp`,
       nationality: { "@type": "Country", name: "Nepal" },
       worksFor: {
         "@type": "GovernmentOrganization",

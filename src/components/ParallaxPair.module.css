@@ -21,16 +21,6 @@
 .layer {
   position: absolute;
   inset: 0;
-  will-change: transform;
-}
-
-/* Extra coverage so the parallax travel never exposes an edge. */
-.back .layer {
-  scale: 1.14;
-}
-
-.front .layer {
-  scale: 1.1;
 }
 
 @media (max-width: 1023px) {

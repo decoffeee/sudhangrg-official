@@ -22,7 +22,8 @@ function hero() {
     tl.from(split.chars, { yPercent: 115, duration: 1.3, stagger: 0.055, ease: EASE }, 0.15);
   }
 
-  tl.from("[data-hero-back]", { scale: 1.15, duration: 2.2, ease: "power2.out" }, 0)
+  // The back layer rests at 1.1× so its scroll lag never exposes an edge.
+  tl.fromTo("[data-hero-back]", { scale: 1.22 }, { scale: 1.1, duration: 2.2, ease: "power2.out" }, 0)
     .from("[data-hero-front]", { y: () => window.innerHeight * 0.14, scale: 1.06, duration: 1.7 }, 0.2)
     .from("[data-hero-shade]", { autoAlpha: 0, duration: 1.4 }, 0.3)
     .from("[data-hero-sub]", { x: 24, autoAlpha: 0, duration: 0.9 }, 1)
@@ -88,16 +89,21 @@ function reveals() {
  * `data-parallax="N"`: moves the element by ±N% of its height across the
  * scroll of its `[data-parallax-root]`. Positive lags behind the page (far
  * away), negative runs ahead of it (close to the viewer).
+ * `data-parallax-scale` enlarges the layer so the travel never shows an edge
+ * (applied here, not in CSS, because GSAP folds the `scale` property into
+ * its own transform).
  */
 function parallax() {
   document.querySelectorAll<HTMLElement>("[data-parallax]").forEach((el) => {
     const amount = parseFloat(el.dataset.parallax ?? "8");
+    const scale = parseFloat(el.dataset.parallaxScale ?? "1");
     const root = el.closest<HTMLElement>("[data-parallax-root]") ?? el.parentElement ?? el;
     gsap.fromTo(
       el,
-      { yPercent: -amount },
+      { yPercent: -amount, scale },
       {
         yPercent: amount,
+        scale,
         ease: "none",
         scrollTrigger: { trigger: root, start: "top bottom", end: "bottom top", scrub: true },
       },
@@ -106,24 +112,22 @@ function parallax() {
 }
 
 /* ------------------------------------------------------------- brushes */
-/** The brush fill is revealed through a stroked mask path that "paints" along its length. */
+/** Sweeps the brush's gradient mask (`--p`) along the stroke, then drops the mask. */
 function brushes() {
-  document.querySelectorAll<SVGSVGElement>("[data-brush]").forEach((svg) => {
-    const path = svg.querySelector<SVGPathElement>("mask path");
-    if (!path) return;
-    const from = svg.dataset.brushFrom === "start" ? 1 : -1;
-    const onLoad = svg.dataset.brushTrigger === "load";
-    const root = svg.closest<HTMLElement>("[data-brush-root]") ?? svg;
+  document.querySelectorAll<HTMLElement>("[data-brush]").forEach((img) => {
+    const onLoad = img.dataset.brushTrigger === "load";
+    const root = img.closest<HTMLElement>("[data-brush-root]") ?? img;
 
     gsap.fromTo(
-      path,
-      { strokeDashoffset: from },
+      img,
+      { "--p": 0 },
       {
-        strokeDashoffset: 0,
-        duration: onLoad ? 2 : 2.4,
+        "--p": 1,
+        duration: onLoad ? 1.8 : 2.2,
         delay: onLoad ? 0.4 : 0,
         ease: "power2.inOut",
         scrollTrigger: onLoad ? undefined : { trigger: root, start: "top 70%", once: true },
+        onComplete: () => img.classList.add("painted"),
       },
     );
 

@@ -93,7 +93,6 @@ svg {
   visibility: hidden;
 }
 
-html:not(.js) [data-brush] mask path,
 html:not(.js) [data-gorkha-outline] {
   stroke-dashoffset: 0 !important;
 }

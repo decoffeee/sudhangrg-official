@@ -77,7 +77,7 @@ export const works = {
       href: "#journey",
       date,
       description: standalone,
-      image: "/images/work-1.png",
+      image: "/images/work-1.webp",
       alt: "Armed Police Force personnel in blue camouflage marching in formation",
     },
     {
@@ -86,7 +86,7 @@ export const works = {
       href: "#journey",
       date,
       description: collaboration,
-      image: "/images/work-2.png",
+      image: "/images/work-2.webp",
       alt: "A landslide crashing down a hillside beside a mountain road as a man runs away",
     },
     {
@@ -95,7 +95,7 @@ export const works = {
       href: "#journey",
       date,
       description: collaboration,
-      image: "/images/work-3.png",
+      image: "/images/work-3.webp",
       alt: "A heavy-lift drone carrying a supply package against a grey sky",
     },
     {
@@ -104,7 +104,7 @@ export const works = {
       href: "#journey",
       date,
       description: standalone,
-      image: "/images/work-4.png",
+      image: "/images/work-4.webp",
       alt: "Aerial view of an ageing prison compound with rusted tin roofs",
     },
     {
@@ -157,7 +157,7 @@ export const news = {
       href: "#news",
       date,
       description: standalone,
-      image: "/images/work-1.png",
+      image: "/images/work-1.webp",
       alt: "Armed Police Force personnel in blue camouflage marching in formation",
     },
     {
@@ -166,7 +166,7 @@ export const news = {
       href: "#news",
       date,
       description: collaboration,
-      image: "/images/work-2.png",
+      image: "/images/work-2.webp",
       alt: "A landslide crashing down a hillside beside a mountain road",
     },
     {
@@ -184,7 +184,7 @@ export const news = {
       href: "#news",
       date,
       description: standalone,
-      image: "/images/work-4.png",
+      image: "/images/work-4.webp",
       alt: "Aerial view of an ageing prison compound with rusted tin roofs",
     },
   ] satisfies Card[],

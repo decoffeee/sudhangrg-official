@@ -8,7 +8,7 @@
   position: absolute;
   z-index: 3;
   font-family: var(--font-heading);
-  font-size: max(13px, calc(var(--u) * 24));
+  font-size: max(18px, calc(var(--u) * 24));
   line-height: 1;
   letter-spacing: calc(var(--u) * -2.16);
   color: var(--red-deep);
@@ -30,7 +30,7 @@
   position: absolute;
   z-index: 3;
   width: calc(var(--u) * 399);
-  font-size: max(14px, calc(var(--u) * 18));
+  font-size: max(15px, calc(var(--u) * 18));
   font-weight: 500;
   line-height: 1.2;
   color: var(--ink);

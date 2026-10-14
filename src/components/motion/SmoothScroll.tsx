@@ -19,9 +19,10 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const lenis = new Lenis({
-      lerp: 0.085,
+      lerp: 0.11,
       smoothWheel: true,
-      anchors: true,
+      // In-page links glide for a fixed time instead of lerping across the whole page.
+      anchors: { duration: 1.4, easing: (t: number) => 1 - Math.pow(1 - t, 3) },
     });
     window.__lenis = lenis;
 

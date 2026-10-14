@@ -4,7 +4,6 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  will-change: transform;
 }
 
 .box {
@@ -12,9 +11,23 @@
   flex: none;
 }
 
-.svg {
+/* `--p` (0 → 1) sweeps the reveal edge along the stroke; see PageMotion. */
+.img {
+  --p: 0;
   position: absolute;
   display: block;
-  overflow: visible;
   max-width: none;
+  -webkit-mask-image: linear-gradient(
+    var(--angle),
+    #000 calc(var(--p) * 122% - 22%),
+    transparent calc(var(--p) * 122%)
+  );
+  mask-image: linear-gradient(var(--angle), #000 calc(var(--p) * 122% - 22%), transparent calc(var(--p) * 122%));
+}
+
+/* Once painted the mask is dropped so scrolling composites a plain image. */
+.img:global(.painted),
+html:not(:global(.js)) .img {
+  -webkit-mask-image: none;
+  mask-image: none;
 }

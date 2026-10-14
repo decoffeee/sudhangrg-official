@@ -10,7 +10,7 @@
   top: calc(var(--u) * 364);
   width: calc(var(--u) * 1162);
   font-family: var(--font-heading);
-  font-size: calc(var(--u) * 64);
+  font-size: max(40px, calc(var(--u) * 64));
   line-height: 1;
   letter-spacing: calc(var(--u) * -5.76);
   color: var(--red);
@@ -24,7 +24,7 @@
   right: 0;
   top: calc(var(--u) * 668);
   font-family: var(--font-heading);
-  font-size: calc(var(--u) * 24);
+  font-size: max(18px, calc(var(--u) * 24));
   line-height: 1;
   letter-spacing: calc(var(--u) * -2.16);
   color: var(--red);

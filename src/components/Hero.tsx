@@ -8,11 +8,11 @@ export default function Hero() {
     <section id="home" className={s.hero} data-hero aria-label="Introduction">
       <div className={`${s.layer} ${s.back}`}>
         <div className={s.inner} data-hero-back>
-          <Image src="/images/hero-back.png" alt="" fill priority sizes="110vw" className={s.backImg} />
+          <Image src="/images/hero-back.webp" alt="" fill priority sizes="100vw" className={s.backImg} />
         </div>
       </div>
 
-      <Brush variant="a" id="hero" className={s.brush} rotate={50.49} opacity={0.3} from="start" trigger="load" data-hero-brush />
+      <Brush variant="a" className={s.brush} rotate={50.49} opacity={0.3} from="start" trigger="load" data-hero-brush />
 
       <div className={s.shadeTop} aria-hidden="true" />
 
@@ -27,7 +27,7 @@ export default function Hero() {
 
       <div className={`${s.layer} ${s.front}`}>
         <div className={s.inner} data-hero-front>
-          <Image src="/images/hero-front.png" alt={hero.imageAlt} fill priority sizes="110vw" className={s.frontImg} />
+          <Image src="/images/hero-front.webp" alt={hero.imageAlt} fill priority sizes="110vw" className={s.frontImg} />
         </div>
       </div>
 

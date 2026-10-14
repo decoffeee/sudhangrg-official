@@ -31,7 +31,6 @@
   width: max-content;
   /* Trailing room covers the scroll-linked drift of the rail. */
   padding: 0 calc(var(--u) * 65 + 12vw) calc(var(--u) * 24) calc(var(--u) * 65);
-  will-change: transform;
 }
 
 @media (max-width: 1023px) {

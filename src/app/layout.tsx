@@ -67,8 +67,9 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // suppressHydrationWarning: the inline script in <head> adds the `js` class before React hydrates.
   return (
-    <html lang="en" className={`${anton.variable} ${archivoBlack.variable} ${archivo.variable}`}>
+    <html lang="en" className={`${anton.variable} ${archivoBlack.variable} ${archivo.variable}`} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

@@ -16,7 +16,7 @@
 .eyebrow {
   left: calc(var(--u) * 64);
   top: calc(var(--u) * 239);
-  font-size: max(12px, calc(var(--u) * 16));
+  font-size: max(14px, calc(var(--u) * 16));
   letter-spacing: calc(var(--u) * -1.44);
   color: var(--red-deep);
 }
@@ -25,7 +25,7 @@
   left: calc(var(--u) * 464);
   top: calc(var(--u) * 239);
   width: calc(var(--u) * 667);
-  font-size: max(22px, calc(var(--u) * 32));
+  font-size: max(26px, calc(var(--u) * 32));
   letter-spacing: calc(var(--u) * -2.88);
   color: #000;
 }

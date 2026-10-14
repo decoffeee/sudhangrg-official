@@ -24,19 +24,19 @@ export default function About() {
 
       <ParallaxPair
         className={s.person}
-        back="/images/person-back.png"
-        front="/images/person-front.png"
+        back="/images/person-back.webp"
+        front="/images/person-front.webp"
         alt={about.personAlt}
         backDepth={4}
         frontDepth={-4}
       />
 
-      <Brush variant="a" id="about" className={s.brush} rotate={2.01} opacity={0.8} from="end" />
+      <Brush variant="a" className={s.brush} rotate={2.01} opacity={0.8} from="end" />
 
       <ParallaxPair
         className={s.vision}
-        back="/images/vision-back.png"
-        front="/images/vision-front.png"
+        back="/images/vision-back.webp"
+        front="/images/vision-front.webp"
         alt={about.visionAlt}
         backDepth={4}
         frontDepth={-4}

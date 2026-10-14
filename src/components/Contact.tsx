@@ -9,8 +9,8 @@ export default function Contact() {
     <section id="contact" className={s.contact} aria-labelledby="contact-heading">
       <ParallaxPair
         className={s.pair}
-        back="/images/send-back.png"
-        front="/images/send-front.png"
+        back="/images/send-back.webp"
+        front="/images/send-front.webp"
         alt={contact.imageAlt}
         position="50% 100%"
         sizes="(max-width: 1023px) 100vw, 52vw"
@@ -18,7 +18,7 @@ export default function Contact() {
         frontDepth={-3}
       />
 
-      <Brush variant="c" id="contact" className={s.brush} rotate={76.2} from="end" />
+      <Brush variant="c" className={s.brush} rotate={76.2} from="end" />
 
       <div className={s.panel}>
         <h2 id="contact-heading" className={s.heading} data-reveal="words">

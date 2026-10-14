@@ -9,9 +9,9 @@
 }
 
 .title {
-  height: calc(var(--u) * 32);
+  min-height: calc(var(--u) * 32);
   font-family: var(--font-heading);
-  font-size: max(12px, calc(var(--u) * 16));
+  font-size: max(14px, calc(var(--u) * 16));
   line-height: 1;
   letter-spacing: calc(var(--u) * -1.44);
   text-transform: uppercase;
@@ -39,7 +39,7 @@
   display: block;
   margin-top: calc(var(--u) * 28);
   font-family: var(--font-heading);
-  font-size: max(12px, calc(var(--u) * 16));
+  font-size: max(14px, calc(var(--u) * 16));
   line-height: 1;
   letter-spacing: calc(var(--u) * -1.44);
   text-transform: uppercase;
@@ -47,7 +47,7 @@
 
 .desc {
   margin-top: calc(var(--u) * 26);
-  font-size: max(13px, calc(var(--u) * 16));
+  font-size: max(14px, calc(var(--u) * 16));
   font-weight: 500;
   line-height: 1.05;
 }
@@ -83,7 +83,7 @@
   width: calc(var(--u) * 312);
   font-family: var(--font-quote);
   font-weight: 600;
-  font-size: max(18px, calc(var(--u) * 28));
+  font-size: max(20px, calc(var(--u) * 28));
   line-height: 1.2;
   color: #fff;
 }
@@ -101,7 +101,7 @@
   align-items: center;
   gap: 0.4em;
   font-family: var(--font-heading);
-  font-size: max(18px, calc(var(--u) * 28));
+  font-size: max(20px, calc(var(--u) * 28));
   line-height: 1;
   letter-spacing: -0.09em;
   text-transform: uppercase;
