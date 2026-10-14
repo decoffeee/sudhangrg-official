@@ -1,0 +1,71 @@
+.news {
+  position: relative;
+  height: calc(var(--u) * 1527);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.eyebrow,
+.heading {
+  position: absolute;
+  font-family: var(--font-heading);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  left: calc(var(--u) * 64);
+  top: calc(var(--u) * 239);
+  font-size: max(12px, calc(var(--u) * 16));
+  letter-spacing: calc(var(--u) * -1.44);
+  color: var(--red-deep);
+}
+
+.heading {
+  left: calc(var(--u) * 464);
+  top: calc(var(--u) * 239);
+  width: calc(var(--u) * 667);
+  font-size: max(22px, calc(var(--u) * 32));
+  letter-spacing: calc(var(--u) * -2.88);
+  color: #000;
+}
+
+.track {
+  top: calc(var(--u) * 382);
+}
+
+@media (max-width: 1023px) {
+  .news {
+    height: auto;
+    padding: 96px 0 96px;
+  }
+
+  .eyebrow,
+  .heading,
+  .track {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+  }
+
+  .eyebrow,
+  .heading {
+    padding: 0 var(--gutter);
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: -0.09em;
+  }
+
+  .heading {
+    margin-top: 22px;
+    font-size: clamp(24px, 7vw, 32px);
+    letter-spacing: -0.09em;
+  }
+
+  .track {
+    margin-top: 48px;
+  }
+}

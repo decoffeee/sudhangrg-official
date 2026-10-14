@@ -1,0 +1,54 @@
+.martyrs {
+  position: relative;
+  height: calc(var(--u) * 1116);
+  background: var(--bg);
+}
+
+.title {
+  position: absolute;
+  left: calc(var(--u) * 283);
+  top: calc(var(--u) * 364);
+  width: calc(var(--u) * 1162);
+  font-family: var(--font-heading);
+  font-size: calc(var(--u) * 64);
+  line-height: 1;
+  letter-spacing: calc(var(--u) * -5.76);
+  color: var(--red);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.date {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--u) * 668);
+  font-family: var(--font-heading);
+  font-size: calc(var(--u) * 24);
+  line-height: 1;
+  letter-spacing: calc(var(--u) * -2.16);
+  color: var(--red);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1023px) {
+  .martyrs {
+    height: auto;
+    padding: 120px var(--gutter) 110px;
+  }
+
+  .title {
+    position: static;
+    width: auto;
+    font-size: clamp(30px, 8vw, 56px);
+    letter-spacing: -0.09em;
+  }
+
+  .date {
+    position: static;
+    margin-top: 40px;
+    font-size: 18px;
+    letter-spacing: -0.09em;
+  }
+}

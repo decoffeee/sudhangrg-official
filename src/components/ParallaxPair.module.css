@@ -1,0 +1,40 @@
+/* `.pair` must not create a stacking context so the frames' z-indexes live in
+   the section's context, letting a brush slot between back and front. */
+.pair {
+  position: absolute;
+}
+
+.frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.back {
+  z-index: 1;
+}
+
+.front {
+  z-index: 4;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+/* Extra coverage so the parallax travel never exposes an edge. */
+.back .layer {
+  scale: 1.14;
+}
+
+.front .layer {
+  scale: 1.1;
+}
+
+@media (max-width: 1023px) {
+  .pair {
+    position: relative;
+  }
+}

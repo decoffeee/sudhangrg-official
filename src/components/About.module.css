@@ -1,0 +1,127 @@
+.about {
+  position: relative;
+  height: calc(var(--u) * 1698);
+  background: var(--bg);
+}
+
+.label {
+  position: absolute;
+  z-index: 3;
+  font-family: var(--font-heading);
+  font-size: max(13px, calc(var(--u) * 24));
+  line-height: 1;
+  letter-spacing: calc(var(--u) * -2.16);
+  color: var(--red-deep);
+  text-transform: uppercase;
+}
+
+.label1 {
+  left: calc(var(--u) * 65);
+  top: 0;
+}
+
+.label2 {
+  right: calc(var(--u) * 64);
+  top: calc(var(--u) * 953);
+  text-align: right;
+}
+
+.copy {
+  position: absolute;
+  z-index: 3;
+  width: calc(var(--u) * 399);
+  font-size: max(14px, calc(var(--u) * 18));
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.copy p + p {
+  margin-top: 1.2em;
+}
+
+.copy1 {
+  left: calc(var(--u) * 465);
+  top: 0;
+}
+
+.copy2 {
+  left: calc(var(--u) * 864);
+  top: calc(var(--u) * 953);
+}
+
+.person {
+  left: calc(var(--u) * 997);
+  top: 0;
+  width: calc(var(--u) * 667);
+  height: calc(var(--u) * 830);
+}
+
+.vision {
+  left: calc(var(--u) * 64);
+  top: calc(var(--u) * 747);
+  width: calc(var(--u) * 667);
+  height: calc(var(--u) * 830);
+}
+
+.brush {
+  z-index: 2;
+  left: calc(var(--u) * -224);
+  top: calc(var(--u) * -346);
+  width: calc(var(--u) * 2832.44);
+  height: calc(var(--u) * 2407.18);
+}
+
+@media (max-width: 1023px) {
+  .about {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    height: auto;
+    padding: 72px var(--gutter) 96px;
+    overflow: hidden;
+  }
+
+  .label,
+  .copy {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    width: auto;
+  }
+
+  .label {
+    font-size: 20px;
+    letter-spacing: -0.09em;
+  }
+
+  .label2 {
+    text-align: left;
+  }
+
+  .copy {
+    font-size: 16px;
+  }
+
+  .person,
+  .vision {
+    left: auto;
+    top: auto;
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    aspect-ratio: 667 / 830;
+  }
+
+  .vision {
+    align-self: flex-end;
+    margin-top: 24px;
+  }
+
+  /* Re-scope the design unit so the stroke is proportionally bigger on phones. */
+  .brush {
+    --u: calc(100vw / 820);
+    top: 34%;
+  }
+}

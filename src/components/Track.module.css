@@ -1,0 +1,46 @@
+.track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  cursor: grab;
+  -webkit-overflow-scrolling: touch;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+
+.dragging * {
+  pointer-events: none;
+}
+
+.inner {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(var(--u) * 20);
+  width: max-content;
+  /* Trailing room covers the scroll-linked drift of the rail. */
+  padding: 0 calc(var(--u) * 65 + 12vw) calc(var(--u) * 24) calc(var(--u) * 65);
+  will-change: transform;
+}
+
+@media (max-width: 1023px) {
+  .track {
+    position: relative;
+  }
+
+  .inner {
+    gap: 14px;
+    padding: 0 calc(var(--gutter) + 12vw) 16px var(--gutter);
+  }
+}

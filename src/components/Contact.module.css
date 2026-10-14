@@ -1,0 +1,164 @@
+.contact {
+  position: relative;
+  height: calc(var(--u) * 1003);
+  background: var(--bg);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.pair {
+  left: calc(var(--u) * -29);
+  top: 0;
+  width: calc(var(--u) * 893);
+  height: calc(var(--u) * 1004);
+}
+
+.brush {
+  z-index: 2;
+  left: calc(var(--u) * -612);
+  top: calc(var(--u) * -119);
+  width: calc(var(--u) * 2222.72);
+  height: calc(var(--u) * 2470.13);
+}
+
+.panel {
+  position: absolute;
+  z-index: 5;
+  left: calc(var(--u) * 997);
+  top: 0;
+  width: calc(var(--u) * 667);
+}
+
+.heading {
+  width: calc(var(--u) * 400);
+  font-family: var(--font-heading);
+  font-size: max(22px, calc(var(--u) * 32));
+  line-height: 1;
+  letter-spacing: calc(var(--u) * -2.88);
+  color: var(--red);
+  text-transform: uppercase;
+}
+
+.form {
+  margin-top: calc(var(--u) * 73);
+}
+
+.field {
+  display: block;
+  width: 100%;
+  height: calc(var(--u) * 79);
+  margin: 0 0 calc(var(--u) * 8);
+  padding: 0 calc(var(--u) * 28);
+  background: #d9d9d9;
+  border: 0;
+  border-radius: 0;
+  font: 500 max(14px, calc(var(--u) * 18)) / 1.2 var(--font-body);
+  color: var(--ink);
+  outline: none;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.field::placeholder {
+  color: rgba(23, 22, 22, 0.45);
+}
+
+.field:focus {
+  background: #e4e3e1;
+  box-shadow: inset 0 0 0 2px var(--red);
+}
+
+.area {
+  height: calc(var(--u) * 321);
+  padding-top: calc(var(--u) * 26);
+  resize: vertical;
+}
+
+.submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  margin-top: calc(var(--u) * 61);
+  font-family: var(--font-heading);
+  font-size: max(22px, calc(var(--u) * 32));
+  line-height: 1;
+  letter-spacing: calc(var(--u) * -2.88);
+  color: var(--red);
+  text-transform: uppercase;
+}
+
+.submit svg {
+  transition: transform 0.5s var(--ease-out);
+}
+
+.submit:hover svg {
+  transform: translateX(0.3em);
+}
+
+.thanks {
+  margin-top: calc(var(--u) * 73);
+  max-width: 34ch;
+  font-size: max(16px, calc(var(--u) * 20));
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+@media (max-width: 1023px) {
+  .contact {
+    height: auto;
+    padding-bottom: 96px;
+  }
+
+  .pair {
+    left: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 893 / 1004;
+    max-height: 90vh;
+  }
+
+  .brush {
+    --u: calc(100vw / 1100);
+    top: -42vw;
+  }
+
+  /* Opaque panel so the stroke stays within the photo band. */
+  .panel {
+    position: relative;
+    left: auto;
+    width: auto;
+    margin-top: 0;
+    padding: 64px var(--gutter) 0;
+    background: var(--bg);
+  }
+
+  .heading {
+    width: auto;
+    max-width: 24ch;
+    font-size: clamp(24px, 7vw, 32px);
+    letter-spacing: -0.09em;
+  }
+
+  .form {
+    margin-top: 40px;
+  }
+
+  .field {
+    height: 60px;
+    margin-bottom: 8px;
+    padding: 0 18px;
+    font-size: 16px;
+  }
+
+  .area {
+    height: 220px;
+    padding-top: 18px;
+  }
+
+  .submit {
+    margin-top: 36px;
+    font-size: 26px;
+    letter-spacing: -0.09em;
+  }
+}

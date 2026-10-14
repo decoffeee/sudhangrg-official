@@ -1,0 +1,120 @@
+:root {
+  /* 1 design unit = 1px of the 1728px Figma frame, scaled to the viewport. */
+  --u: calc(100vw / 1728);
+
+  --bg: #f3f2f0;
+  --red: #e64446;
+  --red-deep: #c93032;
+  --ink: #171616;
+  --navy: #0b1227;
+  --white: #ffffff;
+
+  --font-display: var(--font-anton), "Anton SC", Impact, "Arial Narrow Bold", sans-serif;
+  --font-heading: var(--font-archivo-black), "Archivo Black", "Arial Black", sans-serif;
+  --font-body: var(--font-archivo), Archivo, Arial, sans-serif;
+  --font-nav: "Stack Sans Headline", var(--font-archivo), Arial, sans-serif;
+  --font-quote: "Stack Sans Text", var(--font-archivo), Arial, sans-serif;
+
+  --gutter: calc(var(--u) * 64);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --gutter: 20px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+figure {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--red);
+  color: #fff;
+}
+
+/* Motion: elements are hidden only once JS has taken over (html.js), so the
+   page is fully readable without JavaScript and for crawlers. */
+.js [data-intro],
+.js [data-reveal] {
+  visibility: hidden;
+}
+
+html:not(.js) [data-brush] mask path,
+html:not(.js) [data-gorkha-outline] {
+  stroke-dashoffset: 0 !important;
+}
+
+.menu-open {
+  overflow: hidden;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
