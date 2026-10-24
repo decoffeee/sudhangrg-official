@@ -1,0 +1,258 @@
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--navy) 0%, var(--navy) 30%, #03060f 100%);
+  will-change: transform;
+}
+
+/* Film grain over everything, figure included. A static tile, painted once. */
+.loader::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+  opacity: 0.22;
+}
+
+/* No JavaScript: nothing would ever lift it. */
+html:not(:global(.js)) .loader {
+  display: none;
+}
+
+.inner {
+  position: absolute;
+  inset: 0;
+}
+
+/* Legibility over the figures comes from text shadows (static, painted
+   once) rather than a gradient, so nothing around the cut-out changes when
+   the overlay dissolves. */
+
+/* Mirrors Hero.module.css `.layer.front` so the figure lifts away from the
+   spot it later rises back into. */
+.figure {
+  position: absolute;
+  left: calc(var(--u) * -46);
+  top: calc(var(--u) * -172);
+  width: calc(var(--u) * 1819);
+  height: calc(var(--u) * 1382);
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+}
+
+.img {
+  object-fit: cover;
+  object-position: 50% 56.7%;
+}
+
+/* Static filter on a static element: painted once, never per frame. */
+.silhouette {
+  filter: brightness(0);
+}
+
+/* One line on the header's line, in the header's type: the loader's own
+   header. The prompt shares its grid cell and takes over in place, the card
+   centred on the line (its height is 40px). */
+.top {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: calc(var(--u) * 52);
+  display: grid;
+  justify-items: center;
+  align-items: start;
+  width: max-content;
+  max-width: calc(100vw - 2 * var(--gutter));
+  transform: translateX(-50%);
+  color: #fff;
+  font-family: var(--font-nav);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 2px 14px rgba(5, 9, 20, 0.8);
+}
+
+.line,
+.prompt {
+  grid-area: 1 / 1;
+}
+
+.prompt {
+  margin-top: -14px;
+}
+
+.line {
+  display: flex;
+  gap: max(6px, calc(var(--u) * 9));
+  white-space: nowrap;
+}
+
+.name {
+  font-weight: 700;
+}
+
+.dim {
+  opacity: 0.5;
+}
+
+.count {
+  min-width: 3ch;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The sound card and a quiet way out, on one line; wraps only where the
+   screen is too narrow to hold it. */
+.prompt {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14px 28px;
+}
+
+.prompt[hidden] {
+  display: none;
+}
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font: inherit;
+  text-transform: inherit;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.3s ease;
+}
+
+.choice:hover,
+.choice:focus-visible {
+  color: rgba(255, 255, 255, 0.75);
+  outline: none;
+}
+
+/* The card: solid white with live sound bars, a slow pulse ring and a
+   nudging arrow, so it is the obvious thing to press. Turns red on hover. */
+.primary {
+  position: relative;
+  gap: 12px;
+  padding: 14px 18px 14px 16px;
+  background: #fff;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.18);
+  color: var(--navy);
+  text-shadow: none;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid #fff;
+  pointer-events: none;
+  animation: pulse 2.4s var(--ease-out) infinite;
+}
+
+.primary:hover {
+  background: var(--red);
+  color: #fff;
+}
+
+.primary:hover::after {
+  border-color: var(--red);
+}
+
+.primary:focus-visible {
+  color: var(--navy);
+  outline: 1px solid #fff;
+  outline-offset: 4px;
+}
+
+.primary:hover:focus-visible {
+  color: #fff;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.bars span {
+  width: 2px;
+  height: 100%;
+  background: currentColor;
+  transform-origin: bottom;
+  animation: bar 0.9s ease-in-out infinite alternate;
+}
+
+.bars span:nth-child(2) { animation-delay: -0.3s; animation-duration: 0.7s; }
+.bars span:nth-child(3) { animation-delay: -0.55s; animation-duration: 1.05s; }
+.bars span:nth-child(4) { animation-delay: -0.15s; animation-duration: 0.8s; }
+
+.arrow {
+  animation: nudge 1.6s ease-in-out infinite;
+}
+
+.primary:hover .arrow {
+  animation: none;
+  transform: translateX(4px);
+  transition: transform 0.35s var(--ease-out);
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(1.08, 1.4);
+  }
+}
+
+@keyframes bar {
+  from { transform: scaleY(0.25); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes nudge {
+  0%, 60%, 100% { transform: none; }
+  30% { transform: translateX(4px); }
+}
+
+@media (max-width: 1023px) {
+  .top {
+    top: 18px;
+  }
+
+  /* Wraps to two rows here: hang it from the line instead. */
+  .prompt {
+    margin-top: 0;
+  }
+
+  .figure {
+    inset: 0;
+    width: auto;
+    height: auto;
+  }
+
+  .img {
+    object-position: 50% 35%;
+  }
+}

@@ -21,7 +21,9 @@ type Props = {
  * frames are siblings (not nested) so a page-level brush stroke can sit
  * between them: back is z-index 1, front is z-index 4, brushes use 2.
  * Each layer is enlarged by GSAP (`data-parallax-scale`) so its travel never
- * shows an edge.
+ * shows an edge. The cut-out's drop shadow is baked into the `-front` asset
+ * (scripts/bake-shadows.js): a CSS filter on a layer that moves every frame
+ * would be re-rendered every frame.
  */
 export default function ParallaxPair({
   back,

@@ -11,23 +11,42 @@
   flex: none;
 }
 
-/* `--p` (0 → 1) sweeps the reveal edge along the stroke; see PageMotion. */
+/* Zero-size pivot at the artwork's centre, turned so +x runs along the stroke. */
+.sweep {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* The soft-edged window the paint shows through. Its mask never changes;
+   PageMotion slides the box (and counter-slides the art) with transforms. */
+.reveal {
+  position: absolute;
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - var(--edge)), transparent 100%);
+  mask-image: linear-gradient(90deg, #000 calc(100% - var(--edge)), transparent 100%);
+}
+
 .img {
-  --p: 0;
   position: absolute;
   display: block;
   max-width: none;
-  -webkit-mask-image: linear-gradient(
-    var(--angle),
-    #000 calc(var(--p) * 122% - 22%),
-    transparent calc(var(--p) * 122%)
-  );
-  mask-image: linear-gradient(var(--angle), #000 calc(var(--p) * 122% - 22%), transparent calc(var(--p) * 122%));
 }
 
-/* Once painted the mask is dropped so scrolling composites a plain image. */
-.img:global(.painted),
-html:not(:global(.js)) .img {
+/* Hidden from first paint until PageMotion has put the sweep in its start
+   position, so an unpainted stroke never flashes before JS runs. */
+:global(html.js) .box:not(:global(.armed)) .reveal {
+  visibility: hidden;
+}
+
+/* Promoted only while the sweep runs; once painted the mask is dropped so
+   scrolling composites one plain bitmap. */
+.box:not(:global(.painted)) .reveal,
+.box:not(:global(.painted)) .img {
+  will-change: transform;
+}
+
+.box:global(.painted) .reveal,
+html:not(:global(.js)) .reveal {
   -webkit-mask-image: none;
   mask-image: none;
 }

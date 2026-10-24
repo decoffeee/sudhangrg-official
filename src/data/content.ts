@@ -28,6 +28,9 @@ export const hero = {
   roles: ["HOME", "MINISTER", "NEPAL"],
   roleNote: ["/ MEMBER OF", "PARLIAMENT", "GORKHA"],
   imageAlt: "Sudhan Gurung, wearing a Dhaka topi and khata, standing with elders and people of Gorkha",
+  // Bump `v` after re-baking (scripts/bake-shadows.js): the image optimizer and
+  // browsers cache by URL, not by file contents.
+  front: "/images/hero-front.webp?v=5",
 };
 
 export const martyrs = {
@@ -125,17 +128,163 @@ export const manifesto = {
     ["DEVELOPMENT PROGRESS", "AT GORKHA-1"],
   ],
   heading: ["The Gorkha manifesto", "in progress"],
-  sub: "ONGOING PROJECTS",
-  projects: ["Project A", "Project B", "Project C", "Project D", "Project E", "Project F", "Project G"],
-  /** Marker positions in design units, relative to the works section (Figma y − 4021). */
-  markers: [
-    { x: 545, y: 2207, label: "Project A" },
-    { x: 630, y: 1785, label: "Project B" },
-    { x: 883, y: 1692, label: "Project C" },
-    { x: 857, y: 1663, label: "Project D" },
-    { x: 938, y: 1627, label: "Project E" },
-    { x: 938, y: 1602, label: "Project F" },
+  sub: "PROJECTS IN GORKHA-1",
+  hint: {
+    mouse: "DRAG TO MOVE · SHIFT-DRAG TO TURN · PINCH OR ⌘ + SCROLL TO ZOOM",
+    touch: "DRAG SIDEWAYS TO MOVE · TAP A SITE · USE + − TO ZOOM",
+  },
+  // Real projects in the Gorkha-1 constituency (Tsum Nubri, Dharche, Arughat,
+  // Bhimsen Thapa, Gandaki and Shahid Lakhan rural municipalities, Gorkha
+  // Municipality wards 1–7), as reported up to October 2026. Status lines
+  // follow the cited reports; update them as the work moves on. Site
+  // positions are approximate, in map units. No site photos yet: add `image`
+  // (and `alt`) once licensed photos are available.
+  projects: [
+    {
+      id: "arughat-bridge",
+      name: "Arughat Bridge",
+      kind: "bridge",
+      status: "ongoing",
+      x: 565,
+      y: 2180,
+      place: "Arughat-9 · Gorkha–Dhading crossing",
+      note: "The 11 Oct 2026 flood washed away the Gorkha-side concrete section. The Nepal Army installed a 27 m Bailey bridge on 17–18 Oct as a temporary crossing; no permanent rebuild has been announced.",
+      by: "Nepal Army · Gorkha Road Project",
+      asOf: "Oct 2026",
+      source: {
+        name: "Kantipur",
+        url: "https://ekantipur.com/gandaki-pradesh/2026/10/19/en/179241263023259812.html",
+      },
+    },
+    {
+      id: "soti-khola-bridge",
+      name: "Soti Khola Bridge",
+      kind: "bridge",
+      status: "planned",
+      x: 545,
+      y: 2080,
+      place: "Arughat-2 – Arughat-3",
+      note: "The truss bridge linking Arughat wards 2 and 3 was completely washed away by the 11 Oct 2026 flood. No rebuilding timeline has been reported yet.",
+      by: "Department of Roads",
+      asOf: "Oct 2026",
+      source: {
+        name: "Ratopati",
+        url: "https://english.ratopati.com/story/83297/budhi-gandaki-flood-causes-major-damage-to-bridges-over-arughat-and-soti-rivers-road-department-begins-technical-study",
+      },
+    },
+    {
+      id: "benighat-arughat-larke-road",
+      name: "Benighat–Arughat–Larke Road",
+      kind: "road",
+      status: "ongoing",
+      x: 760,
+      y: 1800,
+      place: "Along the Budhi Gandaki, Arughat to Tsum Nubri",
+      note: "Track being opened up the Budhi Gandaki valley towards Larke. Silt left by the October 2026 flood was cleared and vehicles are running again on the Soti stretch.",
+      by: "Nepal Army · Gorkha Road Project",
+      asOf: "Oct 2026",
+      source: {
+        name: "Kantipur",
+        url: "https://ekantipur.com/gandaki-pradesh/2026/10/13/en/vehicles-resume-running-on-arughat-road-after-removal-of-silt-accumulated-by-budhi-gandaki-21-58.html",
+      },
+    },
+    {
+      id: "machha-khola-hydropower",
+      name: "Machha Khola Hydropower",
+      kind: "hydro",
+      status: "ongoing",
+      x: 670,
+      y: 2022,
+      place: "Dharche-5 · 16 MW",
+      note: "Construction officially began in June 2026. Its access road was damaged in the October 2026 flood.",
+      by: "Private developer",
+      asOf: "Oct 2026",
+      source: {
+        name: "Hamro Patro",
+        url: "https://www.hamropatro.com/en/news/detail/1317394615048370-construction-of-16-mw-machha-khola-hydropower-project-in-gorkha",
+      },
+    },
+    {
+      id: "dobhan-khola-hydropower",
+      name: "Dobhan Khola Hydropower",
+      kind: "hydro",
+      status: "ongoing",
+      progress: 4,
+      x: 727,
+      y: 1930,
+      place: "Dharche-1 · 24.5 MW",
+      note: "Early stage: civil and hydro-mechanical works and the transmission line have not started. The project's camp and Bailey bridge were damaged in the October 2026 flood.",
+      by: "Dobhan Khola Hydropower Ltd.",
+      asOf: "2026",
+      source: { name: "Dobhan Khola Hydropower", url: "https://dobhankholahydro.com.np/projects/" },
+    },
+    {
+      id: "budhi-gandaki-hydroelectric",
+      name: "Budhi Gandaki Hydroelectric",
+      kind: "hydro",
+      status: "planned",
+      x: 530,
+      y: 2295,
+      place: "Gorkha–Dhading border, near Benighat · 1,200 MW",
+      note: "Nepal's planned storage project on the Budhi Gandaki, about 2 km above the Trishuli confluence. Main construction has yet to move forward, and the October 2026 flood has added uncertainty.",
+      by: "Government of Nepal",
+      asOf: "Oct 2026",
+      source: {
+        name: "Kantipur",
+        url: "https://ekantipur.com/business/2026/10/19/en/floods-further-complicate-budhi-gandaki-hydropower-project-construction-process-04-47.html",
+      },
+    },
+  ] satisfies ManifestoProject[],
+  /** Snow peaks of the Himalayan north, in map units (public/svg/nepal-map.svg). */
+  peaks: [
+    { x: 470, y: 1540, h: 1 },
+    { x: 560, y: 1605, h: 0.75 },
+    { x: 905, y: 1585, h: 1.25 },
+    { x: 985, y: 1612, h: 0.9 },
+    { x: 700, y: 1655, h: 0.6 },
+    { x: 815, y: 1640, h: 0.8 },
   ],
+};
+
+export type ProjectKind = "bridge" | "road" | "school" | "health" | "water" | "power" | "hydro";
+export type ProjectStatus = "completed" | "ongoing" | "planned";
+
+export type ManifestoProject = {
+  id: string;
+  name: string;
+  kind: ProjectKind;
+  status: ProjectStatus;
+  /** Percent complete, only where a source reports it. */
+  progress?: number;
+  /** Site position in map units (public/svg/nepal-map.svg, viewBox 1728×2529). */
+  x: number;
+  y: number;
+  /** Where (ward / municipality) and size. */
+  place: string;
+  note: string;
+  /** Who is building or running it. */
+  by: string;
+  /** When the status was last reported. */
+  asOf: string;
+  source: { name: string; url: string };
+  image?: string;
+  alt?: string;
+};
+
+export const projectKinds: Record<ProjectKind, string> = {
+  bridge: "Bridge works",
+  road: "Road construction",
+  school: "School building",
+  health: "Health post",
+  water: "Drinking water",
+  power: "Electrification",
+  hydro: "Hydropower",
+};
+
+export const projectStatuses: Record<ProjectStatus, string> = {
+  completed: "Completed",
+  ongoing: "In progress",
+  planned: "Not started",
 };
 
 export const news = {

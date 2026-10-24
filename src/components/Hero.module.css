@@ -15,7 +15,9 @@
 }
 
 /* The background is Figma's rendered export of the layer (already cropped to
-   the frame), so it simply covers the hero. */
+   the frame), so it simply covers the hero. Its darkening is a black overlay
+   painted into the same layer rather than filter: brightness(), which would
+   be re-applied to the whole layer on every frame it moves. */
 .back {
   z-index: 1;
   left: 0;
@@ -24,8 +26,10 @@
   height: 100%;
 }
 
+/* Runs a little past the hero's bottom so the cutout never shows a gap. */
 .front {
   z-index: 6;
+  height: calc(var(--u) * 1382);
 }
 
 .inner {
@@ -38,6 +42,16 @@
   object-position: 50% 50%;
 }
 
+.dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.38);
+  pointer-events: none;
+}
+
+/* The cut-out's rough white border and drop shadow are baked into hero-front.webp (see
+   scripts/bake-shadows.js); a CSS filter here would be re-rendered on every
+   frame the layer scales or scrolls. */
 .frontImg {
   object-fit: cover;
   object-position: 50% 56.7%;

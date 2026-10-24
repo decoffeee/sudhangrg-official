@@ -77,8 +77,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@600;700&family=Stack+Sans+Text:wght@600&display=swap"
           rel="stylesheet"
         />
-        {/* Flags that JS is running so motion-hidden elements only hide when they will be animated in. */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        {/* Flags that JS is running so motion-hidden elements only hide when they
+            will be animated in. The home page always opens at the top: scroll
+            restoration must be switched off before the browser applies it. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js');if(location.pathname==='/')history.scrollRestoration='manual'",
+          }}
+        />
       </head>
       <body>
         <SmoothScroll>{children}</SmoothScroll>

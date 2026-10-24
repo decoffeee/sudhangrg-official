@@ -93,8 +93,19 @@ svg {
   visibility: hidden;
 }
 
-html:not(.js) [data-gorkha-outline] {
-  stroke-dashoffset: 0 !important;
+/* Everything scrubbed by scroll gets its own compositor layer. Without it
+   Chrome re-rasterizes the element at every new sub-pixel offset, i.e. every
+   frame — the brushes and full-bleed photos made scrolling stutter. */
+.js [data-parallax],
+.js [data-hero-back],
+.js [data-hero-front],
+.js [data-hero-brush],
+.js [data-hero-name],
+.js [data-hero-title],
+.js [data-brush-root],
+.js [data-map],
+.js [data-track-inner] {
+  will-change: transform;
 }
 
 .menu-open {

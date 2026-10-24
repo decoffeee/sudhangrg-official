@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { centreOf, snapPoints } from "./motion/snap";
 import s from "./Track.module.css";
 
 type Props = {
@@ -9,10 +10,12 @@ type Props = {
   /** Initial scroll offset in design units (desktop only), to echo the design's mid-carousel state. */
   initialOffset?: number;
   label: string;
+  /** Snap the page so the rail sits mid-screen when scrolling stops near it. */
+  snap?: boolean;
 };
 
 /** Horizontal card rail: native scrolling plus drag-to-scroll with the pointer. */
-export default function Track({ children, className, initialOffset = 0, label }: Props) {
+export default function Track({ children, className, initialOffset = 0, label, snap }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -43,6 +46,12 @@ export default function Track({ children, className, initialOffset = 0, label }:
       if (Math.abs(dx) > 4) moved = true;
       el.scrollLeft = startLeft - dx;
     };
+    // A mouse press must not focus the card link: Chrome would then draw the
+    // keyboard focus ring on it as soon as any key is pressed. Keyboard focus
+    // (Tab) still shows it.
+    const press = (e: MouseEvent) => {
+      if (e.button === 0) e.preventDefault();
+    };
     const up = (e: PointerEvent) => {
       if (!dragging) return;
       dragging = false;
@@ -59,18 +68,22 @@ export default function Track({ children, className, initialOffset = 0, label }:
     };
 
     el.addEventListener("pointerdown", down);
+    el.addEventListener("mousedown", press);
     el.addEventListener("pointermove", move);
     el.addEventListener("pointerup", up);
     el.addEventListener("pointercancel", up);
     el.addEventListener("click", click, true);
+    const removeSnap = snap ? snapPoints.add(() => (window.innerWidth >= 1024 ? [centreOf(el)] : [])) : () => {};
     return () => {
       el.removeEventListener("pointerdown", down);
+      el.removeEventListener("mousedown", press);
       el.removeEventListener("pointermove", move);
       el.removeEventListener("pointerup", up);
       el.removeEventListener("pointercancel", up);
       el.removeEventListener("click", click, true);
+      removeSnap();
     };
-  }, [initialOffset]);
+  }, [initialOffset, snap]);
 
   return (
     <div ref={ref} className={`${s.track} ${className ?? ""}`} data-track role="region" aria-label={label} tabIndex={0}>

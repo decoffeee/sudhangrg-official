@@ -7,8 +7,10 @@ export default function Hero() {
   return (
     <section id="home" className={s.hero} data-hero aria-label="Introduction">
       <div className={`${s.layer} ${s.back}`}>
-        <div className={s.inner} data-hero-back>
+        <div className={s.inner} data-hero-back data-intro>
           <Image src="/images/hero-back.webp" alt="" fill priority sizes="100vw" className={s.backImg} />
+          {/* Inside the moving layer so photo and overlay are one raster and can never disagree for a frame. */}
+          <div className={s.dim} aria-hidden="true" />
         </div>
       </div>
 
@@ -26,8 +28,8 @@ export default function Hero() {
       </h1>
 
       <div className={`${s.layer} ${s.front}`}>
-        <div className={s.inner} data-hero-front>
-          <Image src="/images/hero-front.webp" alt={hero.imageAlt} fill priority sizes="110vw" className={s.frontImg} />
+        <div className={s.inner} data-hero-front data-intro>
+          <Image src={hero.front} alt={hero.imageAlt} fill priority sizes="110vw" className={s.frontImg} />
         </div>
       </div>
 

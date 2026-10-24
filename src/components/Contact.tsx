@@ -12,7 +12,7 @@ export default function Contact() {
         back="/images/send-back.webp"
         front="/images/send-front.webp"
         alt={contact.imageAlt}
-        position="50% 100%"
+        position="50% 0%"
         sizes="(max-width: 1023px) 100vw, 52vw"
         backDepth={4}
         frontDepth={-3}

@@ -7,6 +7,7 @@ import News from "@/components/News";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import PageMotion from "@/components/motion/PageMotion";
+import Loader from "@/components/motion/Loader";
 import { site } from "@/data/content";
 
 const jsonLd = {
@@ -57,6 +58,7 @@ export default function HomePage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <Loader />
       <Header />
       <main id="main">
         <Hero />

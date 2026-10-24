@@ -1,0 +1,661 @@
+.stage {
+  position: relative;
+  z-index: 2;
+  height: 100vh;
+  min-height: 680px;
+  overflow: hidden;
+  color: #fff;
+}
+
+/* 2D map under the scene until it is ready (and for no-WebGL / no-JS). Both
+   fade out at every edge into whatever the section's gradient is there. */
+.fallback,
+.host {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.9s var(--ease-out);
+  mask-image:
+    linear-gradient(180deg, transparent 0%, #000 16%, #000 84%, transparent 100%),
+    radial-gradient(ellipse 72% 78% at 36% 50%, #000 58%, transparent 100%);
+  mask-composite: intersect;
+}
+
+.fallbackImg {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 30% 78%;
+}
+
+/* With JavaScript the 3D map builds in by itself; the 2D map is only the
+   no-WebGL fallback. */
+:global(.js) .stage:not([data-state="failed"]) .fallback {
+  display: none;
+}
+
+.host {
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.stage[data-state="failed"] .host {
+  display: none;
+}
+
+/* Shown only while the scene is being built (JS on, not ready yet). */
+.loading {
+  position: absolute;
+  z-index: 2;
+  left: 36%;
+  top: 50%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  translate: -50% -50%;
+  font-family: var(--font-heading);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+:global(.js) .stage[data-state="loading"] .loading {
+  display: flex;
+}
+
+.loading span {
+  position: relative;
+  width: 72px;
+  height: 2px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.loading span::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--red);
+  animation: loading 1.1s var(--ease-out) infinite;
+}
+
+@keyframes loading {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.host[data-dragging] {
+  cursor: grabbing;
+}
+
+.host[data-hover="site"] {
+  cursor: pointer;
+}
+
+.host canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Keeps the text column readable when the map is turned or zoomed under it. */
+.veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(14, 11, 28, 0) 54%, rgba(14, 11, 28, 0.72) 66%, rgba(14, 11, 28, 0.82) 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 16%, #000 84%, transparent 100%);
+}
+
+/* The text column lets drags through to the map; only the list takes the pointer. */
+.panel {
+  position: absolute;
+  z-index: 2;
+  left: calc(var(--u) * 1128);
+  top: max(96px, calc(50% - var(--u) * 260));
+  width: calc(var(--u) * 536);
+  pointer-events: none;
+}
+
+.labels {
+  display: flex;
+  font-family: var(--font-heading);
+  font-size: max(14px, calc(var(--u) * 16));
+  line-height: 1;
+  letter-spacing: calc(var(--u) * -1.44);
+  text-transform: uppercase;
+}
+
+.labels p:first-child {
+  width: calc(var(--u) * 223);
+  flex: none;
+  color: var(--red-deep);
+}
+
+.labels p:last-child {
+  opacity: 0.5;
+}
+
+.heading {
+  margin-top: calc(var(--u) * 44);
+  font-family: var(--font-heading);
+  font-size: max(26px, calc(var(--u) * 32));
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: calc(var(--u) * -2.88);
+  text-transform: uppercase;
+}
+
+.sub {
+  margin-top: calc(var(--u) * 50);
+  font-family: var(--font-heading);
+  font-size: max(14px, calc(var(--u) * 16));
+  line-height: 1;
+  letter-spacing: calc(var(--u) * -1.44);
+  text-transform: uppercase;
+  opacity: 0.25;
+}
+
+.projects {
+  margin-top: calc(var(--u) * 26);
+}
+
+.project {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 17);
+  width: 100%;
+  height: max(34px, calc(var(--u) * 36));
+  pointer-events: auto;
+  text-align: left;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.project::before {
+  content: "";
+  flex: none;
+  width: calc(var(--u) * 11);
+  height: calc(var(--u) * 11);
+  min-width: 9px;
+  min-height: 9px;
+  margin-left: calc(var(--u) * 2);
+  border-radius: 50%;
+  background: var(--dot);
+  box-shadow: 0 0 0 0 var(--dot);
+  transition: box-shadow 0.4s var(--ease-out);
+}
+
+.project[data-status="completed"] {
+  --dot: #3fb37f;
+}
+
+.project[data-status="ongoing"] {
+  --dot: #f2a93b;
+}
+
+.project[data-status="planned"] {
+  --dot: #b9bcc6;
+}
+
+.project[data-active],
+.project[aria-pressed="true"] {
+  transform: translateX(8px);
+}
+
+.project[data-active]::before,
+.project[aria-pressed="true"]::before {
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.14);
+}
+
+.projectName {
+  font-size: max(15px, calc(var(--u) * 18));
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.projectKind {
+  font-family: var(--font-heading);
+  font-size: max(11px, calc(var(--u) * 12));
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  transition: opacity 0.3s;
+}
+
+.project[data-active] .projectKind,
+.project[aria-pressed="true"] .projectKind {
+  opacity: 0.85;
+}
+
+.project:focus-visible {
+  outline-color: #fff;
+}
+
+.hint {
+  margin-top: calc(var(--u) * 34);
+  font-family: var(--font-heading);
+  font-size: max(11px, calc(var(--u) * 12));
+  letter-spacing: -0.06em;
+  opacity: 0.3;
+}
+
+.hintTouch {
+  display: none;
+}
+
+@media (hover: none) {
+  .hintMouse {
+    display: none;
+  }
+
+  .hintTouch {
+    display: inline;
+  }
+}
+
+/* ------------------------------------------------------- view controls */
+.controls {
+  position: absolute;
+  z-index: 3;
+  left: var(--gutter);
+  bottom: max(40px, calc(var(--u) * 64));
+  display: flex;
+  gap: 6px;
+}
+
+.controls[hidden] {
+  display: none;
+}
+
+/* Only while the map is built; they fade with it on the way out. */
+.controls {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.stage[data-built] .controls {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.controls button {
+  display: grid;
+  place-items: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(11, 18, 39, 0.55);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  transition:
+    background 0.25s,
+    border-color 0.25s,
+    opacity 0.25s;
+}
+
+.controls button:hover:not(:disabled) {
+  background: rgba(244, 241, 234, 0.14);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.controls button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.controls button:focus-visible {
+  outline-color: #fff;
+}
+
+.controls svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.reset {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------- site card */
+/* Positioned by the scene every frame (translate to the site's screen point). */
+.card {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.cardInner {
+  position: absolute;
+  left: 0;
+  bottom: 14px;
+  width: 300px;
+  translate: -50% 0;
+  overflow: hidden;
+  background: #f4f1ea;
+  color: var(--ink);
+  box-shadow:
+    0 2px 6px rgba(5, 9, 20, 0.25),
+    0 24px 50px rgba(5, 9, 20, 0.45);
+  opacity: 0;
+  transform: translateY(10px) scale(0.96);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 0.25s ease,
+    transform 0.45s var(--ease-out);
+}
+
+.card[data-open] .cardInner {
+  opacity: 1;
+  transform: none;
+}
+
+/* Near the right edge the card opens to the left of the site. */
+.card[data-flip="left"] .cardInner {
+  translate: -92% 0;
+  transform-origin: 92% 100%;
+}
+
+/* Near the top it hangs below the site instead. */
+.card[data-mode="below"] .cardInner {
+  bottom: auto;
+  top: 120px;
+  transform-origin: 50% 0;
+}
+
+/* A focused site gets the card beside it, vertically centred. */
+.card[data-mode="side"] .cardInner,
+.card[data-mode="side-left"] .cardInner {
+  bottom: auto;
+  top: 0;
+  translate: 0 -50%;
+}
+
+.card[data-mode="side"] .cardInner {
+  left: calc(var(--r, 0px) + 18px);
+  transform-origin: 0 50%;
+}
+
+.card[data-mode="side-left"] .cardInner {
+  left: auto;
+  right: calc(var(--r, 0px) + 18px);
+  transform-origin: 100% 50%;
+}
+
+.photo {
+  position: relative;
+  height: 168px;
+  background: #1b2233;
+}
+
+.photo[hidden] {
+  display: none;
+}
+
+.photoImg {
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.photoImg[data-on] {
+  opacity: 1;
+}
+
+.status {
+  flex: none;
+  padding: 4px 7px 3px;
+  font-family: var(--font-heading);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--navy);
+}
+
+.status::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--dot);
+  vertical-align: 0;
+}
+
+.status[data-status="completed"],
+.bar[data-status="completed"] {
+  --dot: #3fb37f;
+}
+
+.status[data-status="ongoing"],
+.bar[data-status="ongoing"] {
+  --dot: #f2a93b;
+}
+
+.status[data-status="planned"],
+.bar[data-status="planned"] {
+  --dot: #9ea2ad;
+}
+
+.body {
+  padding: 14px 16px 16px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.kind {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  color: var(--red-deep);
+}
+
+.name {
+  margin-top: 4px;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: -0.07em;
+  text-transform: uppercase;
+}
+
+.place {
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  opacity: 0.55;
+}
+
+.bar {
+  position: relative;
+  height: 4px;
+  margin-top: 14px;
+  background: rgba(23, 22, 22, 0.12);
+}
+
+.bar span {
+  position: absolute;
+  inset: 0;
+  background: var(--dot);
+  transform-origin: 0 50%;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 7px;
+  font-family: var(--font-heading);
+  font-size: 10px;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.note {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  opacity: 0.75;
+}
+
+.credit {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(23, 22, 22, 0.1);
+  font-family: var(--font-heading);
+  font-size: 9.5px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.credit span:last-child {
+  max-width: 45%;
+  text-align: right;
+}
+
+.close {
+  margin-top: 8px;
+  font-family: var(--font-heading);
+  font-size: 9.5px;
+  letter-spacing: -0.02em;
+  opacity: 0.4;
+}
+
+@media (max-width: 1023px) {
+  .stage {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    padding-top: 120px;
+  }
+
+  .veil {
+    display: none;
+  }
+
+  .loading {
+    left: 50%;
+    top: auto;
+    bottom: min(62vw, 340px);
+  }
+
+  .fallback,
+  .host {
+    top: auto;
+    bottom: 0;
+    height: min(125vw, 680px);
+  }
+
+  .panel {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    margin: 0 var(--gutter);
+    padding-bottom: min(125vw, 680px);
+  }
+
+  .labels {
+    flex-direction: column;
+    gap: 14px;
+    font-size: 12px;
+    letter-spacing: -0.09em;
+  }
+
+  .labels p:first-child {
+    width: auto;
+  }
+
+  .heading {
+    margin-top: 28px;
+    font-size: clamp(24px, 7vw, 32px);
+    letter-spacing: -0.09em;
+  }
+
+  .sub {
+    margin-top: 36px;
+    font-size: 12px;
+    letter-spacing: -0.09em;
+  }
+
+  .projects {
+    margin-top: 16px;
+  }
+
+  .project {
+    gap: 14px;
+    height: 38px;
+  }
+
+  .projectName {
+    font-size: 16px;
+  }
+
+  .hint {
+    margin-top: 20px;
+    font-size: 11px;
+  }
+
+  .controls {
+    left: auto;
+    right: var(--gutter);
+    bottom: 16px;
+  }
+
+  .controls button {
+    min-width: 34px;
+    height: 34px;
+    padding: 0 10px;
+  }
+
+  .card {
+    /* The map band is the bottom of the stage; the scene measures from its top. */
+    top: auto;
+    bottom: min(125vw, 680px);
+  }
+
+  .cardInner {
+    width: 240px;
+  }
+
+  .photo {
+    height: 120px;
+  }
+}
