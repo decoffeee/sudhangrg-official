@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { loaderState } from "./loader-state";
+import { idle } from "./idle";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -205,6 +206,21 @@ function map() {
   });
 }
 
+/* -------------------------------------------------------------- images */
+/**
+ * Fetches and decodes the below-the-fold photos one at a time, in idle
+ * periods, once the hero has entered. Left lazy, each would start loading
+ * only as it neared the viewport and land (and decode) mid-scroll.
+ */
+async function warmImages(alive: () => boolean) {
+  for (const img of document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]')) {
+    await idle();
+    if (!alive()) return;
+    img.loading = "eager";
+    await img.decode().catch(() => {});
+  }
+}
+
 /* ------------------------------------------------------------- mount */
 /** Resolves once the hero's images are decoded (or after a short grace period). */
 function heroImagesReady() {
@@ -227,6 +243,7 @@ export default function PageMotion() {
     // If something goes wrong before setup, never leave content hidden. The
     // clock starts once the loader is out of the way (it may wait on a click).
     let safety = 0;
+    let warm = 0;
     const armSafety = loaderState.onDone(() => {
       safety = window.setTimeout(() => {
         if (!heroStarted) html.classList.remove("js");
@@ -254,6 +271,8 @@ export default function PageMotion() {
           hero();
           brushes("load");
         });
+        // After the entrance, which owns the main thread until then.
+        warm = window.setTimeout(() => warmImages(() => !dead), 2600);
       });
     });
 
@@ -261,6 +280,7 @@ export default function PageMotion() {
       dead = true;
       armSafety();
       clearTimeout(safety);
+      clearTimeout(warm);
       ctx?.revert();
     };
   }, []);

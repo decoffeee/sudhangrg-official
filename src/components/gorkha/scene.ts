@@ -4,6 +4,7 @@ import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js
 import gsap from "gsap";
 import type { ManifestoProject } from "@/data/content";
 import { gorkhaPath } from "@/data/gorkha-path";
+import { idle } from "../motion/idle";
 import { buildPeak, buildSite, type Site } from "./models";
 
 /**
@@ -17,6 +18,10 @@ import { buildPeak, buildSite, type Site } from "./models";
  * sites pop up. GorkhaMap tweens it in on entry and back out on exit. The pointer orbits a little on move;
  * drag pans, Shift/right-drag turns, pinch or ⌘/Ctrl + wheel zooms, and
  * clicking a site flies the camera to it.
+ *
+ * Building it is ~150ms of main-thread work, so it is spread over idle
+ * periods, and every shader is compiled before the stage is first shown
+ * rather than on the frame a peak or site first appears.
  */
 
 const K = 0.01;
@@ -114,7 +119,9 @@ function gorkha() {
 
 export async function createGorkhaScene(o: Options): Promise<GorkhaScene> {
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+  // The canvas fills the stage and redraws every frame it is on screen,
+  // while the page scrolls over it: 1.5× keeps that well inside budget.
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.setClearColor(0x000000, 0);
@@ -146,6 +153,7 @@ export async function createGorkhaScene(o: Options): Promise<GorkhaScene> {
 
   // Ground: every district, plus faint borders.
   const svg = await fetch(o.mapUrl).then((r) => r.text());
+  await idle();
   const ground = districts(svg);
   const groundMesh = new THREE.Mesh(
     ground.fill,
@@ -160,6 +168,7 @@ export async function createGorkhaScene(o: Options): Promise<GorkhaScene> {
   scene.add(groundMesh, borders);
 
   // Gorkha, raised out of the map.
+  await idle();
   const g = gorkha();
   const lift = new THREE.Group();
   const solid = new THREE.Mesh(g.solid, [
@@ -474,8 +483,26 @@ export async function createGorkhaScene(o: Options): Promise<GorkhaScene> {
       gsap.ticker.remove(tick);
     }
   });
-  io.observe(o.host);
+
+  // Warm up while the canvas is still transparent: compile every program
+  // (in parallel where the browser can), then draw once with everything
+  // shown so the shadow pass compiles and every buffer is uploaded. Left to
+  // the first visible frames, Safari stalls ~200ms mid-scroll.
+  await idle();
+  await renderer.compileAsync(scene, camera);
+  await idle();
+  const hidden: THREE.Object3D[] = [];
+  scene.traverse((obj) => {
+    if (!obj.visible) {
+      hidden.push(obj);
+      obj.visible = true;
+    }
+  });
+  place();
+  renderer.render(scene, camera);
+  hidden.forEach((obj) => (obj.visible = false));
   render(0, 1);
+  io.observe(o.host);
 
   const api: GorkhaScene = {
     setIntro(p) {

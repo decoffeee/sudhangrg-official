@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { manifesto, projectKinds, projectStatuses, type ManifestoProject } from "@/data/content";
 import type { GorkhaScene } from "./gorkha/scene";
 import { snapPoints } from "./motion/snap";
+import { loaderState } from "./motion/loader-state";
 import s from "./GorkhaMap.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -79,35 +80,55 @@ export default function GorkhaMap() {
       desktop.matches ? [stageEl.getBoundingClientRect().top + window.scrollY] : [],
     );
 
-    import("./gorkha/scene")
-      .then(({ createGorkhaScene }) =>
-        createGorkhaScene({
-          host: hostEl,
-          card: cardEl,
-          projects,
-          peaks: manifesto.peaks,
-          mapUrl: "/svg/nepal-map.svg",
-          reduced,
-          shift: () => (desktop.matches ? 0.17 : 0),
-          onActive: (id) => setActive(id),
-          onFocus: (id) => setFocused(id),
-          onView: (v) => setZoom(v),
-        }),
-      )
-      .then((created) => {
-        if (dead) return created.destroy();
-        scene.current = created;
-        created.setIntro(proxy.p);
-        stageEl.toggleAttribute("data-built", proxy.p > 0.6);
-        setState("ready");
-        if (inView) play(true);
-      })
-      .catch(() => {
-        if (!dead) setState("failed");
-      });
+    // The scene costs ~150ms of main-thread work to build (spread over idle
+    // periods). Start once the intro and the hero's entrance are over, or as
+    // soon as the reader heads for the map, so neither ever hitches.
+    let started = false;
+    let timer = 0;
+    const near = new IntersectionObserver(([e]) => e.isIntersecting && build(), { rootMargin: "150% 0px" });
+    near.observe(stageEl);
+    const afterIntro = loaderState.onDone(() => {
+      timer = window.setTimeout(build, 2600);
+    });
+
+    const build = () => {
+      if (started || dead) return;
+      started = true;
+      near.disconnect();
+      clearTimeout(timer);
+      import("./gorkha/scene")
+        .then(({ createGorkhaScene }) =>
+          createGorkhaScene({
+            host: hostEl,
+            card: cardEl,
+            projects,
+            peaks: manifesto.peaks,
+            mapUrl: "/svg/nepal-map.svg",
+            reduced,
+            shift: () => (desktop.matches ? 0.17 : 0),
+            onActive: (id) => setActive(id),
+            onFocus: (id) => setFocused(id),
+            onView: (v) => setZoom(v),
+          }),
+        )
+        .then((created) => {
+          if (dead) return created.destroy();
+          scene.current = created;
+          created.setIntro(proxy.p);
+          stageEl.toggleAttribute("data-built", proxy.p > 0.6);
+          setState("ready");
+          if (inView) play(true);
+        })
+        .catch(() => {
+          if (!dead) setState("failed");
+        });
+    };
 
     return () => {
       dead = true;
+      near.disconnect();
+      afterIntro();
+      clearTimeout(timer);
       tween?.kill();
       trigger.kill();
       removeSnap();
