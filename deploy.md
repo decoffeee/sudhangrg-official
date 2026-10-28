@@ -17,12 +17,13 @@ for hosts that only run npm. Whichever you use, use it everywhere.
 
 | Name | Required | Example | Used for |
 | --- | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Yes in production | `https://sudhangurung.com` | Canonical URLs, Open Graph, `sitemap.xml`, `robots.txt` |
+| `NEXT_PUBLIC_SITE_URL` | No | `https://sudhangurung.com.np` | Canonical URLs, Open Graph, `sitemap.xml`, `robots.txt` |
 
-No trailing slash. Without it, every absolute URL falls back to
-`http://localhost:3000`, which breaks link previews and search indexing.
-It is read at **build** time (`NEXT_PUBLIC_*` values are inlined), so set it
-before building and rebuild if it changes.
+The production domain is **sudhangurung.com.np**, and it is also the default
+(`src/data/content.ts`), so production builds are correct without setting
+anything. Set the variable only to build for a different address, such as a
+staging domain. No trailing slash. It is read at **build** time
+(`NEXT_PUBLIC_*` values are inlined), so rebuild after changing it.
 
 For local production testing, copy `.env.example` to `.env.local`
 (`.env*.local` is git-ignored).
@@ -33,14 +34,14 @@ For local production testing, copy `.env.example` to `.env.local`
 2. On vercel.com: **Add New → Project → Import** the repository.
    Framework, install (`pnpm install`) and build (`pnpm build`) commands are
    detected automatically; leave them as they are.
-3. Under **Settings → Environment Variables**, add `NEXT_PUBLIC_SITE_URL` for
-   the Production environment (and Preview if you want correct previews).
-4. Under **Settings → Git**, set the production branch to `main`. Every other
-   branch (for example `dev/iteration`) gets its own preview URL.
-5. Add the domain under **Settings → Domains** and follow the DNS
-   instructions shown there.
+3. No environment variables are needed (see above).
+4. Under **Settings → Git**, set the production branch to `release` (see
+   Branches below). Every other branch gets its own preview URL.
+5. Add `sudhangurung.com.np` (and `www.sudhangurung.com.np`, redirecting to
+   it) under **Settings → Domains**, then create the DNS records Vercel shows
+   at the `.com.np` registrar / DNS host.
 
-To ship: merge into `main` and push. Vercel builds and deploys on its own.
+To ship, see Branches below. Vercel builds and deploys on its own.
 
 ## Option B — Your own server (VPS, Docker host, etc.)
 
@@ -49,7 +50,7 @@ git clone https://github.com/decoffeee/sudhangrg-official.git
 cd sudhangrg-official
 corepack enable
 pnpm install --frozen-lockfile
-NEXT_PUBLIC_SITE_URL=https://your-domain.com pnpm build
+pnpm build
 PORT=3000 pnpm start
 ```
 
@@ -61,8 +62,8 @@ pm2 start "pnpm start" --name sudhangrg
 pm2 save && pm2 startup
 ```
 
-Put a reverse proxy (nginx, Caddy) in front for HTTPS and point it at
-`localhost:3000`. Optimised images are cached in `.next/cache/images`; keep
+Put a reverse proxy (nginx, Caddy) in front for HTTPS on
+`sudhangurung.com.np` and point it at `localhost:3000`. Optimised images are cached in `.next/cache/images`; keep
 that directory between restarts so images are not re-encoded on every boot.
 
 To update:
@@ -72,6 +73,19 @@ git pull
 pnpm install --frozen-lockfile
 pnpm build
 pm2 restart sudhangrg
+```
+
+## Branches
+
+- `dev/iteration`: day-to-day work.
+- `main`: integrated, tested work.
+- `release`: what is live. Production deploys from here.
+
+To ship:
+
+```bash
+git checkout main && git merge dev/iteration && git push origin main
+git checkout release && git merge --ff-only main && git push origin release
 ```
 
 ## Before every deploy

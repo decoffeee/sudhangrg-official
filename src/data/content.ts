@@ -3,7 +3,7 @@ export const site = {
   title: "Sudhan Gurung — Home Minister of Nepal | Official Portfolio",
   description:
     "Official portfolio of Sudhan Gurung, Home Minister of Nepal and Member of Parliament for Gorkha. His vision for a safer Nepal, ongoing works, the live Gorkha manifesto and the latest updates.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://sudhangurung.com.np",
   locale: "en_US",
   keywords: [
     "Sudhan Gurung",
